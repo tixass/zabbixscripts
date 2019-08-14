@@ -1,0 +1,30 @@
+#!/bin/bash
+##Options from Zabbix 
+## 1) {ALERT.SENDTO} 
+## 2) {ALERT.SUBJECT} 
+## 3) {ALERT.MESSAGE} and 
+## 4) Webhook from Slack to your channel
+TO="$1"
+SUB="$2"
+MESS="$3"
+KEY="$4"
+
+##-----------------------------------------------
+##--Parse problem resolution from {ALERT.SUBJECT}. In my subjects it was a first word, in your's may be other
+SOLV=`echo $SUB | cut -d " " -f 1`
+
+##--make varios icons at start of message in Slack
+if [[ $SOLV == 'PROBLEM' ]]
+then
+        ICON=":scream:"
+elif [[ $SOLV == 'SOLVED' ]]
+then
+        ICON=":ok_hand:"
+else
+        ICON=":point_up_2:"
+fi
+##--send combined message to Slack
+/usr/bin/curl -X POST --data-urlencode "payload={\"channel\": \"$TO\", \"username\": \"ZabbixBot\", \"text\": \"$ICON $SUB\n$MESS\"}" $KEY
+
+##--write info string to log file
+echo "`date` $SUB" >> /tmp/slack.log
