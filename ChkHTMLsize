@@ -1,0 +1,4 @@
+#!/bin/bash
+SITE="$1"
+
+curl -so /dev/null $SITE -w '%{size_download}'
