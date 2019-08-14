@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DBNAME="dbname"
+BCKDIR="/tmp/backup"
+BCKFILE="/var/www/backup_sql.tar"
+
+TBLIST=`mysql $DBNAME -s -r -e "SHOW TABLES;"`
+for TBLNAME in $TBLIST
+do
+	mysqldump --no-data $DBNAME $TBLNAME > $BCKDIR/$TBLNAME
+	mysqldump --no-create-info $DBNAME $TBLNAME > $BCKDIR/$TBLNAME.sql
+done
+
+tar -cvf $BCKFILE $BCKDIR
+rm -rf $BCKDIR/*
