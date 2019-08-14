@@ -1,0 +1,18 @@
+#!/bin/bash
+
+LOGDIR="/var/www/....../logs/uncaught"
+TMPFILE="/tmp/lasterr.tmp"
+
+if [ ! -f $TMPFILE ]
+then
+	touch $TMPFILE
+fi
+
+LASTLOG=`ls -tc $LOGDIR | head -n 1`
+PREVERR=`cat $TMPFILE`
+ERRSTRING=`tail -n 1 $LOGDIR/$LASTLOG` 
+if [ "$ERRSTRING" != "$PREVERR" ]
+then
+	echo $ERRSTRING
+	echo $ERRSTRING > $TMPFILE
+fi
