@@ -1,0 +1,17 @@
+#!/bin/bash
+
+LOG="/var/www/......./exceptions.log"
+TMPFILE="/tmp/lastuncatcherr.tmp"
+
+if [ ! -f $TMPFILE ]
+then
+	touch $TMPFILE
+fi
+
+PREVERR=`cat $TMPFILE`
+ERRSTRING=`cat $LOG | grep UNCAUGHT_EXCEPTION | tail -n 1`
+if [ "$ERRSTRING" != "$PREVERR" ]
+then
+	echo $ERRSTRING
+	echo $ERRSTRING > $TMPFILE
+fi
