@@ -1,0 +1,4 @@
+#!/bin/bash
+SITE="$1"
+
+curl -s $SITE | grep "</html>" | wc -l
